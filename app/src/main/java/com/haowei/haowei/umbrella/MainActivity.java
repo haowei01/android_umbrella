@@ -1,8 +1,11 @@
 package com.haowei.haowei.umbrella;
 
+//import android.app.NotificationManager;
+//import android.content.Context;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+//import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +32,7 @@ public class MainActivity extends ActionBarActivity
     private ActionBarActivity mainActivity;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private int notificationID = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,24 @@ public class MainActivity extends ActionBarActivity
                 webService.execute(location);
             }
         });
+
+/*        Button button = (Button) findViewById(R.id.notification);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //displayNotify();
+            }
+        });*/
     }
+
+/*    protected void displayNotify(){
+        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this);
+        notifyBuild.setContentTitle("Umbrella Notification");
+        notifyBuild.setContentText("Notification Content");
+        notifyBuild.setSmallIcon(R.mipmap.ic_launcher);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(notificationID, notifyBuild.build());
+    }*/
 
     @Override
     protected void onStart() {
@@ -87,13 +108,17 @@ public class MainActivity extends ActionBarActivity
     public void onConnected(Bundle bundle) {
         Log.i(DEBUG_GOOGLE_CLIENT, "GoogleClientAPI connected and started");
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.i(DEBUG_GEO_LOCATION_CHANGE, "Location is "+ location.toString());
-        webService = new WebService(mainActivity);
-        webService.execute(
-                Double.toString(location.getLatitude()),
-                Double.toString(location.getLongitude())
-        );
-        mGeoText.setText(location.toString());
+        if (location != null) {
+            Log.i(DEBUG_GEO_LOCATION_CHANGE, "Location is " + location.toString());
+            webService = new WebService(mainActivity);
+            webService.execute(
+                    Double.toString(location.getLatitude()),
+                    Double.toString(location.getLongitude())
+            );
+            mGeoText.setText(location.toString());
+        } else {
+            Log.i(DEBUG_GEO_LOCATION_CHANGE, "Location is null");
+        }
         getUpdatedLocation();
     }
 
@@ -111,7 +136,7 @@ public class MainActivity extends ActionBarActivity
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
