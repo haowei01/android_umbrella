@@ -1,0 +1,11 @@
+*.swp
+.gradle
+/local.properties
+/.idea
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+/app/src/main/res/values/
+/app/src/release/res/values/google_maps_api.xml
