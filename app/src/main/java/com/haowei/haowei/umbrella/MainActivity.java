@@ -86,6 +86,14 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle bundle) {
         Log.i(DEBUG_GOOGLE_CLIENT, "GoogleClientAPI connected and started");
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Log.i(DEBUG_GEO_LOCATION_CHANGE, "Location is "+ location.toString());
+        webService = new WebService(mainActivity);
+        webService.execute(
+                Double.toString(location.getLatitude()),
+                Double.toString(location.getLongitude())
+        );
+        mGeoText.setText(location.toString());
         getUpdatedLocation();
     }
 
@@ -103,6 +111,7 @@ public class MainActivity extends ActionBarActivity
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
@@ -110,6 +119,11 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onLocationChanged(Location location) {
         Log.i(DEBUG_GEO_LOCATION_CHANGE, "geo location changed, to " + location.toString());
+        webService = new WebService(mainActivity);
+        webService.execute(
+                Double.toString(location.getLatitude()),
+                Double.toString(location.getLongitude())
+        );
         mGeoText.setText(location.toString());
     }
 }

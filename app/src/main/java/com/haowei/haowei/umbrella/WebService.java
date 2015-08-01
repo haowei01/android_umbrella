@@ -2,6 +2,7 @@ package com.haowei.haowei.umbrella;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,13 +31,16 @@ class WebService extends AsyncTask<String, String, String> {
         String rString = "Need Umbrella: ", result = null;
         HttpURLConnection conn = null;
         try {
-            StringBuilder urlString = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast/daily?q=");
-            if (params.length > 0 && params[0] != null) {
-                urlString.append(params[0]);
+            StringBuilder urlString = new StringBuilder("http://api.openweathermap.org/data/2.5/forecast/daily?");
+            if (params.length == 1 && params[0] != null) {
+                urlString.append("q=" + params[0]);
+            } else if(params.length == 2) {
+                urlString.append("lat=" + params[0] + "&lon=" + params[1]);
             } else {
                 urlString.append("Sanfrancisco");
             }
             urlString.append("&mode=json&units=metric&cnt=1");
+            Log.i("WebService", "url "+urlString.toString());
             URL url = new URL(urlString.toString());
             conn = (HttpURLConnection) url.openConnection();
             result = getURLString(conn.getInputStream());
