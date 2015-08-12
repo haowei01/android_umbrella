@@ -1,11 +1,8 @@
 package com.haowei.haowei.umbrella;
 
-//import android.app.NotificationManager;
-//import android.content.Context;
 import android.location.Location;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-//import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,23 +55,32 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-/*        Button button = (Button) findViewById(R.id.notification);
+        Button button = (Button) findViewById(R.id.notification);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //displayNotify();
+                Notifier.createNotify(mainActivity);
             }
-        });*/
-    }
+        });
 
-/*    protected void displayNotify(){
-        NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this);
-        notifyBuild.setContentTitle("Umbrella Notification");
-        notifyBuild.setContentText("Notification Content");
-        notifyBuild.setSmallIcon(R.mipmap.ic_launcher);
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(notificationID, notifyBuild.build());
-    }*/
+        Button set_alarm = (Button) findViewById(R.id.set_alarm);
+        set_alarm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Alarm.setAlarm(mainActivity);
+            }
+        });
+
+        Button cancel_alarm = (Button) findViewById(R.id.cancel_alarm);
+        cancel_alarm.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Alarm.cancelAlarm(mainActivity);
+            }
+        });
+    }
 
     @Override
     protected void onStart() {
